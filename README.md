@@ -11,5 +11,5 @@ Quick start option:
 
 ## Summary
 
-When the program is executed, a HTML page opens up. The user will see a bunch of movie posters on the screen with the movie tite. If the user clicks on any of the poster images,
- the trailer for the movie will start playing.
+When the program is executed, a HTML page opens up. The user will see a bunch of movie posters on the screen with their respective movie titles. If a user clicks on any of the 
+poster images, the trailer for that particular movie will start playing.
