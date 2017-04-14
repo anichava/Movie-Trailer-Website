@@ -39,7 +39,7 @@ interstellar = media.Movie("Interstellar",
                            "Trying to save the future of mankind.",
                            "https://upload.wikimedia.org/wikipedia/en/b/bc/"
                            "Interstellar_film_poster.jpg",
-                           "https://www.youtube.com/watch?v=2LqzF5WauAw")
+                           "https://www.youtube.com/watch?v=Lm8p5rlrSkY")
 
 # Creating a Movie instance for "Inside Out".
 inside_out = media.Movie("Inside Out",
