@@ -4,8 +4,10 @@
 
 Quick start option:
 
+- Make sure you have python installed. Check version: `python --version`
+- This project was tested on `Python 2.7.12`
 - Clone the repo: `git clone https://github.com/anichava/Movie-Trailer-Website.git`
-- Go to the directory where the repo was cloned.
+- Make sure you are in the directory where this project was cloned in.
 - Then enter: `cd Movie-Trailer-Website`
 - Run the program: `python entertainment_center.py`
 
