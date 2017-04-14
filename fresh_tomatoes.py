@@ -1,4 +1,9 @@
+import webbrowser
+import os
+import re
 
+# Styles and scripting for the page
+main_page_head = '''
 <head>
     <meta charset="utf-8">
     <title>Fresh Tomatoes!</title>
@@ -75,7 +80,10 @@
         });
     </script>
 </head>
+'''
 
+# The main page layout and title bar
+main_page_content = '''
 <!DOCTYPE html>
 <html lang="en">
   <body>
@@ -103,37 +111,48 @@
       </div>
     </div>
     <div class="container">
-      
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="YoHD9XEInc0" data-toggle="modal" data-target="#trailer">
-    <img src="https://upload.wikimedia.org/wikipedia/en/2/2e/Inception_%282010%29_theatrical_poster.jpg" width="220" height="342">
-    <h2>Inception</h2>
-</div>
-
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="vak9ZLfhGnQ" data-toggle="modal" data-target="#trailer">
-    <img src="https://upload.wikimedia.org/wikipedia/en/a/af/Batman_Begins_Poster.jpg" width="220" height="342">
-    <h2>Batman Begins</h2>
-</div>
-
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="EXeTwQWrcwY" data-toggle="modal" data-target="#trailer">
-    <img src="https://upload.wikimedia.org/wikipedia/en/8/8a/Dark_Knight.jpg" width="220" height="342">
-    <h2>The Dark Knight</h2>
-</div>
-
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="GokKUqLcvD8" data-toggle="modal" data-target="#trailer">
-    <img src="https://upload.wikimedia.org/wikipedia/en/8/83/Dark_knight_rises_poster.jpg" width="220" height="342">
-    <h2>The Dark Knight Rises</h2>
-</div>
-
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="2LqzF5WauAw" data-toggle="modal" data-target="#trailer">
-    <img src="https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg" width="220" height="342">
-    <h2>Interstellar</h2>
-</div>
-
-<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="seMwpP0yeu4" data-toggle="modal" data-target="#trailer">
-    <img src="https://upload.wikimedia.org/wikipedia/en/0/0a/Inside_Out_%282015_film%29_poster.jpg" width="220" height="342">
-    <h2>Inside Out</h2>
-</div>
-
+      {movie_tiles}
     </div>
   </body>
 </html>
+'''
+
+# A single movie entry html template
+movie_tile_content = '''
+<div class="col-md-6 col-lg-4 movie-tile text-center" data-trailer-youtube-id="{trailer_youtube_id}" data-toggle="modal" data-target="#trailer">
+    <img src="{poster_image_url}" width="220" height="342">
+    <h2>{movie_title}</h2>
+</div>
+'''
+
+def create_movie_tiles_content(movies):
+    # The HTML content for this section of the page
+    content = ''
+    for movie in movies:
+        # Extract the youtube ID from the url
+        youtube_id_match = re.search(r'(?<=v=)[^&#]+', movie.trailer_youtube_url)
+        youtube_id_match = youtube_id_match or re.search(r'(?<=be/)[^&#]+', movie.trailer_youtube_url)
+        trailer_youtube_id = youtube_id_match.group(0) if youtube_id_match else None
+
+        # Append the tile for the movie with its content filled in
+        content += movie_tile_content.format(
+            movie_title=movie.title,
+            poster_image_url=movie.poster_image_url,
+            trailer_youtube_id=trailer_youtube_id
+        )
+    return content
+
+def open_movies_page(movies):
+  # Create or overwrite the output file
+  output_file = open('fresh_tomatoes.html', 'w')
+
+  # Replace the placeholder for the movie tiles with the actual dynamically generated content
+  rendered_content = main_page_content.format(movie_tiles=create_movie_tiles_content(movies))
+
+  # Output the file
+  output_file.write(main_page_head + rendered_content)
+  output_file.close()
+
+  # open the output file in the browser
+  url = os.path.abspath(output_file.name)
+  webbrowser.open('file://' + url, new=2) # open in a new tab, if possible
